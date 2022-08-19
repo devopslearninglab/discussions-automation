@@ -10,8 +10,8 @@ on:
 
 env:
     GH_TOKEN: ${{ secrets.DISCUSSIONS_AUTOMATION }}
-    ORGANIZATION: $GITHUB_REPOSITORY_OWNER #devopslearninglab
-    REPO: $GITHUB_REPOSITORY # change-log
+    ORGANIZATION: "devopslearninglab" #$GITHUB_REPOSITORY_OWNER
+    REPO: "change-log" #$GITHUB_REPOSITORY
     CATEGORY: "DIC_kwDOHsO2_M4CQVw_"
 
 jobs:
@@ -24,41 +24,42 @@ jobs:
           gh api graphql -f query='query ListDiscussionsByCategory {
             repository(owner:"${{ env.ORGANIZATION }}",name:"${{ env.REPO }}") {
                 discussions(first: 50, categoryId:"${{ env.CATEGORY }}"){
-                  totalCount
-                  pageInfo {
-                      startCursor
-                      endCursor
-                      hasNextPage
-                      hasPreviousPage
-                  }
-                  edges {
-                      cursor
-                      node{
-                          id
-                          title
-                          bodyHTML
-                          author{
-                              login
-                          }
-                          answerChosenAt
-                          category{
-                              id
-                              name
-                              description
-                              isAnswerable
-                              slug
-                              createdAt
-                              updatedAt
-                          }
-                      } 
-                  }
-              }' > ${{ env.CATEGORY }}.md
-                    echo 'DISCUSSION_ID='
-                    $(jq '.data.repository.discussions.edges.node.id' ${{ env.CATEGORY }}.md) 
-                      >> $GITHUB_ENV
-                    echo 'DISCUSSION_TITLE='
-                    $(jq '.data.repository.discussions.edges.node.title' ${{ env.CATEGORY }}.md) 
-                      >> $GITHUB_ENV
-                    echo 'DISCUSSION_BODY='
-                    $(jq '.data.repository.discussions.edges.node.bodyHTML' ${{ env.CATEGORY }}.md) 
-                      >> $GITHUB_ENV
+                    totalCount
+                    pageInfo {
+                        # type: PageInfo (from the public schema)
+                        startCursor
+                        endCursor
+                        hasNextPage
+                        hasPreviousPage
+                    }
+                    edges {
+                        cursor
+                        node{
+                            id
+                            title
+                            bodyHTML
+                            author{
+                                login
+                            }
+                            answerChosenAt
+                            category{
+                                id
+                                name
+                                description
+                                isAnswerable
+                                slug
+                                createdAt
+                                updatedAt
+                            }
+                        } 
+                    }
+                }' > ${{ env.CATEGORY }}.md
+                echo 'DISCUSSION_ID='
+                $(jq '.data.repository.discussions.edges.node.id' ${{ env.CATEGORY }}.md) 
+                  >> $GITHUB_ENV
+                echo 'DISCUSSION_TITLE='
+                $(jq '.data.repository.discussions.edges.node.title' ${{ env.CATEGORY }}.md) 
+                  >> $GITHUB_ENV
+                echo 'DISCUSSION_BODY='
+                $(jq '.data.repository.discussions.edges.node.bodyHTML' ${{ env.CATEGORY }}.md) 
+                  >> $GITHUB_ENV
