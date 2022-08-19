@@ -22,8 +22,8 @@ jobs:
         id: list-discussions
         run: |
           gh api graphql -f query='query ListDiscussionsByCategory {
-            repository(owner:"${{ env.ORGANIZATION }}",name:"${{ env.REPO }}") {
-                discussions(first: 50, categoryId:"${{ env.CATEGORY }}"){
+            repository(owner: "devopslearninglab", name: "change-log") {
+                discussions(first: 50, categoryId:"DIC_kwDOHsO2_M4CQVw_"){
                     totalCount
                     pageInfo {
                         # type: PageInfo (from the public schema)
@@ -53,13 +53,15 @@ jobs:
                             }
                         } 
                     }
-                }' > ${{ env.CATEGORY }}.md
-                echo 'DISCUSSION_ID='
-                $(jq '.data.repository.discussions.edges.node.id' ${{ env.CATEGORY }}.md) 
-                  >> $GITHUB_ENV
-                echo 'DISCUSSION_TITLE='
-                $(jq '.data.repository.discussions.edges.node.title' ${{ env.CATEGORY }}.md) 
-                  >> $GITHUB_ENV
-                echo 'DISCUSSION_BODY='
-                $(jq '.data.repository.discussions.edges.node.bodyHTML' ${{ env.CATEGORY }}.md) 
-                  >> $GITHUB_ENV
+                }
+            }
+          }' > ${{ env.CATEGORY }}.md
+          echo 'DISCUSSION_ID='
+          $(jq '.data.repository.discussions.edges.node.id' ${{ env.CATEGORY }}.md) 
+            >> $GITHUB_ENV
+          echo 'DISCUSSION_TITLE='
+          $(jq '.data.repository.discussions.edges.node.title' ${{ env.CATEGORY }}.md) 
+            >> $GITHUB_ENV
+          echo 'DISCUSSION_BODY='
+          $(jq '.data.repository.discussions.edges.node.bodyHTML' ${{ env.CATEGORY }}.md) 
+            >> $GITHUB_ENV
