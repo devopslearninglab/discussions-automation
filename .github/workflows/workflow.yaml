@@ -1,0 +1,64 @@
+name: Discussions to markdown
+
+on:
+  push:
+  schedule:
+    - cron: "0 */1 * * *"
+
+  discussion:
+    types: [created, edited, deleted]
+
+env:
+    GH_TOKEN: ${{ secrets.DISCUSSIONS_AUTOMATION }}
+    ORGANIZATION: $GITHUB_REPOSITORY_OWNER #devopslearninglab
+    REPO: $GITHUB_REPOSITORY # change-log
+    CATEGORY: "DIC_kwDOHsO2_M4CQVw_"
+
+jobs:
+  discussion-markdown:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List discussions
+        id: list-discussions
+        run: |
+          gh api graphql -f query='query ListDiscussionsByCategory {
+            repository(owner:"${{ env.ORGANIZATION }}",name:"${{ env.REPO }}") {
+                discussions(first: 50, categoryId:"${{ env.CATEGORY }}"){
+                  totalCount
+                  pageInfo {
+                      startCursor
+                      endCursor
+                      hasNextPage
+                      hasPreviousPage
+                  }
+                  edges {
+                      cursor
+                      node{
+                          id
+                          title
+                          bodyHTML
+                          author{
+                              login
+                          }
+                          answerChosenAt
+                          category{
+                              id
+                              name
+                              description
+                              isAnswerable
+                              slug
+                              createdAt
+                              updatedAt
+                          }
+                      } 
+                  }
+              }' > ${{ env.CATEGORY }}.md
+                    echo 'DISCUSSION_ID='
+                    $(jq '.data.repository.discussions.edges.node.id' ${{ env.CATEGORY }}.md) 
+                      >> $GITHUB_ENV
+                    echo 'DISCUSSION_TITLE='
+                    $(jq '.data.repository.discussions.edges.node.title' ${{ env.CATEGORY }}.md) 
+                      >> $GITHUB_ENV
+                    echo 'DISCUSSION_BODY='
+                    $(jq '.data.repository.discussions.edges.node.bodyHTML' ${{ env.CATEGORY }}.md) 
+                      >> $GITHUB_ENV
