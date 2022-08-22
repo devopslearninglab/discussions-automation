@@ -57,11 +57,11 @@ jobs:
             }
           }' > ${{ env.CATEGORY }}.json
           echo 'DISCUSSION_ID='
-          $(jq -r '.data.repository.discussions.edges[].node.id' ${{ env.CATEGORY }}.json) 
+          $(jq -r '.data.repository.discussions.edges[0].node.id' ${{ env.CATEGORY }}.json) 
             >> $GITHUB_ENV
           echo 'DISCUSSION_TITLE='
-          $(jq -r '.data.repository.discussions.edges[].node.title' ${{ env.CATEGORY }}.json) 
+          $(jq -r '.data.repository.discussions.edges[0].node.title' ${{ env.CATEGORY }}.json) 
             >> $GITHUB_ENV
           echo 'DISCUSSION_BODY='
-          $(jq -r '.data.repository.discussions.edges[].node.bodyHTML' ${{ env.CATEGORY }}.json) 
+          $(jq -r '.data.repository.discussions.edges[0].node.bodyHTML' ${{ env.CATEGORY }}.json) 
             >> $GITHUB_ENV
