@@ -18,8 +18,8 @@ jobs:
   discussion-markdown:
     runs-on: ubuntu-latest
     steps:
-      - name: List discussions
-        id: list-discussions
+      - name: List discussions entries by category
+        id: list-discussions-by-category
         run: |
           gh api graphql -f query='query ListDiscussionsByCategory {
             repository(owner: "devopslearninglab", name: "change-log") {
@@ -37,6 +37,8 @@ jobs:
                         node{
                             id
                             title
+                            body
+                            bodyText
                             bodyHTML
                             author{
                                 login
@@ -57,8 +59,14 @@ jobs:
             }
           }' > ${{ env.CATEGORY }}.json
 
-      - name: Archive category results
+      - name: Archive discussion entries
         uses: actions/upload-artifact@v3
         with:
-          name: category-results
+          name: discussion-entries
           path: ${{ env.CATEGORY }}.json
+
+      - name: Print discussion entries
+        shell: bash
+        run: |
+          value=`cat ${{ env.CATEGORY }}.json`
+          echo $value
