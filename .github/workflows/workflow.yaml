@@ -56,3 +56,9 @@ jobs:
                 }
             }
           }' > ${{ env.CATEGORY }}.json
+
+      - name: Archive category results
+        uses: actions/upload-artifact@v3
+        with:
+          name: category-results
+          path: ${{ env.CATEGORY }}.json
