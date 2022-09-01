@@ -11,7 +11,7 @@
     <tbody>
         <tr>
             <td class="category-td td_text">Elasticsearch</td>
-            <td class="title-td td_text">https://github.com/elastic/elasticsearch</td>
+            <td class="title-td td_text"></td>
             <td class="log-td td_text">https://www.elastic.co/</td>
         </tr>
         <tr>
