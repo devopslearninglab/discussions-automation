@@ -1,0 +1,22 @@
+[
+    {
+        "Category": "Google",
+        "Title": "https://github.com/kubernetes/kubernetes",
+        "Log": "https://kubernetes.io/"
+    },
+    {
+        "Category": "Elasticsearch",
+        "Title": "https://github.com/elastic/elasticsearch",
+        "Log": "https://www.elastic.co/"
+    },
+    {
+        "Category": "Redhat",
+        "Title": "https://github.com/openshift/origin",
+        "Log": "http://www.openshift.org/"
+    },
+    {
+        "Category": "HashiCorp",
+        "Title": "https://www.terraform.io/",
+        "Log": "https://github.com/hashicorp/terraform"
+    }
+]

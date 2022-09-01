@@ -3,8 +3,12 @@ name: Discussions to markdown
 on:
   push:
   schedule:
-    - cron: "0 */1 * * *"
+    # At the end of every day
+    - cron: "0 0 * * *"
 
+  # created, edited, deleted, transferred, pinned, unpinned
+  # labeled, unlabeled, locked, unlocked, category_changed, answered, unanswered
+  # https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#discussion
   discussion:
     types: [created, edited, deleted]
 
@@ -70,3 +74,13 @@ jobs:
         run: |
           value=`cat ${{ env.CATEGORY }}.json`
           echo $value
+      
+      - name: Markdown autodocs
+        uses: dineshsonachalam/markdown-autodocs@v1.0.7
+        with:
+          commit_author: Author <actions@github.com>
+          commit_user_email: actions@github.com
+          commit_message: Apply automatic changes
+          branch: main
+          output_file_paths: '[./change-log-entries-test.md]'
+          categories: '[json-to-html-table]'
